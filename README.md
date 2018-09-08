@@ -31,10 +31,10 @@ Many models can be used to make predictions instead of one "golden" or "magic" m
 
 ### Twitter Sentiment
 
-* What an TS tells you: what does the news say about the stock
+* What an TS tells you: what is twitter saying about a stock
 * Strength:
-* Weakness: could be missing keywords, or interpreting keywords incorrectly due to some context like "not good."
-* Possible improvements: include other social media platforms
+* Weakness: could be missing keywords, or interpreting keywords incorrectly due to some missed context like "*not* good."
+* Possible improvements: include other social media platforms and news websites
 
 ### Bull Vs Bear Market
 
