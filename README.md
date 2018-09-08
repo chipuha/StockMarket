@@ -1,4 +1,4 @@
-# StockMarket
+### StockMarket
 Many models can be used to make predictions instead of one "golden" or "magic" model. This notebook includes code for multiple models--each with different strengths and weaknesses:
 
 #Simple Moving Average
