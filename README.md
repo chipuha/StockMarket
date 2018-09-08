@@ -3,7 +3,7 @@ Many models can be used to make predictions instead of one "golden" or "magic" m
 
 #Simple Moving Average
 
-What an SMA tells you: trends but does not predict future prices
+What an SMA tells you: trends but does not predict future prices.
 Strength: This confirms past trends.
 Weakness: Does not predict future. Sensitive to the time you average over.
 Possible improvements:
