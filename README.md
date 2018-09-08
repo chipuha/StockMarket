@@ -42,3 +42,21 @@ Many models can be used to make predictions instead of one "golden" or "magic" m
 * Strength: Provides a general long-term market trend 
 * Weakness: Very general, long-term trend. Not stock specific.
 * Possible improvements: 
+
+
+# Project Outline
+### *Phase 1*
+1. Add each model to repo as objects in their own folders/files
+2. Add master file that accesses each model for a specific Dow Jones ticker (start with ~30 Dow Jones stocks)
+
+### *Phase 2*
+1. Add automation abilities (to be determined)
+
+### *Phase 3*
+1. Make money
+
+### *Phase 4*
+1. Pay for annual dirt biking tours with stock profits
+
+### *Phase 5*
+1. Consider including divedends into analysis (weighted portfolio between trading and holding dividend earning entities (CDs, stocks, etc.)?)
