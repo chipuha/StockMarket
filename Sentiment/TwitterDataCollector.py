@@ -12,10 +12,7 @@ Created on Sat Mar 24 08:53:50 2018
 import tweepy
 from tweepy import OAuthHandler
  
-consumer_key = 'IoXG70bNtMpikyzhl7bkFz9Zc'
-consumer_secret = '1ECNpyOvyqjN7KzD8xt3GPJ09bIwamsimz4ktdpllUEVxQmhC6'
-access_token = '1329544154-K9Msp05Yj5GS7g3FdfjHXeQN5Yho3bplUFoGbq0'
-access_secret = 'RMQSg45L3CMqAUGLpsQ0xqHCKkUXXgcAWPgXqvyNxpKlP'
+# ---------- INSERT API STUFF ----------
  
 auth = OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_secret)
