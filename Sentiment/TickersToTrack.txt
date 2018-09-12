@@ -1,0 +1,10 @@
+$AAPL
+$MSFT
+$SGMO
+$CRSP
+$EDIT
+$APC
+$SEDG
+$EDIT
+$AMD
+$SPX
