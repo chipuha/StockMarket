@@ -17,11 +17,11 @@ Pick a web app library: [Django](https://www.djangoproject.com) looks promising 
 
 #### *Phase 2*
 Follow a Model-View-Controller design by deciding what the model will be (stock trading models/data/graphs/text), some basic view styles, and how we want to control the view (think interaction between view and model).
-- View
+* **View**:
 Based on the mockup. I'm thinking we'll need a 'home' screen view and an individual stock view.
-- Model
+* **Model**:
 The model will need stock tickers, stock data, the models to process the data, and maybe more. We may need to talk more about how we want to represent all of that in terms of classes (i.e. what classes do we create for the model). Do we make stock classes and model classes (allowing less data query calls). Or just model classes that can take in a stock (but then everytime a stock is processed by a model, we have to requery for the stock data...)
-- Controller
+* **Controller**:
 In the 'home' view we want a search bar and clickable stocks on the left. How often do we want the controller to post sell, hold, buy, and model health values?
 In the individual stock view we can use the bohek (or is it bokeh?) plotting to get clickable graphs that are zoomable (but may load in a different browser window... have to look into that).
 
