@@ -5,7 +5,7 @@ How to run web app. In terminal, change directors until you're in the stockadvis
 ```python
 python manage.py runserver
 ```
-Open a browser and go to either [localhost:8000/advisor] or http://127.0.0.1:8000/advisor
+Open a browser and go to either localhost:8000/advisor or http://127.0.0.1:8000/advisor
 
 ## Current Project Structure
 Django projects have a main web app manging level (stockadvisor folder) then plugable "apps". So far this project has the high level manging folder files. Apps to come!
