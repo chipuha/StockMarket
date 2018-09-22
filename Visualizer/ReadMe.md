@@ -26,4 +26,4 @@ In the 'home' view we want a search bar and clickable stocks on the left. How of
 In the individual stock view we can use the bohek (or is it bokeh?) plotting to get clickable graphs that are zoomable (but may load in a different browser window... have to look into that).
 
 #### *Phase 3*
-Make wicked cool sytling scheme.
+Make wicked cool styling scheme.
