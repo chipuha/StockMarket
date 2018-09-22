@@ -13,7 +13,7 @@ Django projects have a main web app manging level (stockadvisor folder) then plu
 ## Construction Phases
 
 #### *Phase 1*
-Pick a web app library: [Django](https://www.djangoproject.com) looks promising and seems to be well documented. The intro tutorial is LONG but doable.
+Pick a web app library: [Django](https://www.djangoproject.com) looks promising and seems to be well documented. The intro [tutorial](https://docs.djangoproject.com/en/2.1/intro/tutorial01/) is LONG but doable.
 
 #### *Phase 2*
 Follow a Model-View-Controller design by deciding what the model will be (stock trading models/data/graphs/text), some basic view styles, and how we want to control the view (think interaction between view and model).
