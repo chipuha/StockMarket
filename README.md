@@ -22,7 +22,7 @@ Many models can be used to make predictions instead of one "golden" or "magic" m
 ### Linear Fit On Price
 
 * What an LFP tells you: linear trends over long term but does not predict future prices
-* Strength: Many larger companies with less volitate stock prices seems to fit to lines quite well. This confirms past trends.
+* Strength: Many larger companies with less violate stock prices seems to fit to lines quite well. This confirms past trends.
 * Weakness:
 * Inputs
 * Outputs
@@ -32,7 +32,7 @@ Many models can be used to make predictions instead of one "golden" or "magic" m
 
 ### Volatility Measure
 
-* What an VM tells you: has to stock price been volitate recently. We assume it will continue in the trend though it does not explicity predict that
+* What an VM tells you: has to stock price been violate recently. We assume it will continue in the trend though it does not explicitly predict that
 * Strength: measures volatility. This could be a good measure to weight all other models by. High volatility would mean the price will change soon and thus, look at your other models to see if that change will be up or down.
 * Weakness: Does not predict future.
 * Inputs
@@ -91,7 +91,7 @@ Many models can be used to make predictions instead of one "golden" or "magic" m
 * Strengths: Helps to know if something needs to be reworked, if we're on the right path
 * Weaknesses: Based on our bias and if we act on the model's recommendations or not
 * Inputs: buy and sell data and model outputs
-* Outputs: % yeild
+* Outputs: % yield
 * Steps needed: Easy way to record buy/sell data
 * Questions to consider:
 * Possible improvements:
@@ -112,4 +112,4 @@ Many models can be used to make predictions instead of one "golden" or "magic" m
 1. Pay for annual dirt biking tours with stock profits
 
 ### *Phase 5*
-1. Consider including divedends into analysis (weighted portfolio between trading and holding dividend earning entities (CDs, stocks, etc.)?)
+1. Consider including dividends into analysis (weighted portfolio between trading and holding dividend earning entities (CDs, stocks, etc.)?)
