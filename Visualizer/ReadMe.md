@@ -7,6 +7,12 @@ python manage.py runserver
 ```
 Open a browser and go to either localhost:8000/advisor or http://127.0.0.1:8000/advisor
 
+To open the admin settings and explore the database/edit database manually, run
+```python
+python manage.py runserver
+```
+ Then go to http://127.0.0.1:8000/admin. Sign in with username: rasmusson and password: stockadvisor
+
 ## Current Project Structure
 Django projects have a main web app manging level (stockadvisor folder) then plugable "apps". So far this project has the high level manging folder files. Main (and only) app is advisor app. The app uses a template view that is passed in a ticker symbol which is displays on the second header of the page.
 
