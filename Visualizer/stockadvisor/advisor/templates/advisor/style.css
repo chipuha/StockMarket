@@ -15,27 +15,26 @@ header {
     color: white;
 }
 
-/* Create two columns/boxes that floats next to each other */
-nav {
+/* Create two columns/boxes that floats next to each other (aside and article) */
+aside {
     float: left;
     width: 30%;
-    height: 300px; /* only for demonstration, should be removed */
     background: #ccc;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left: 15px;
     padding: 20px;
 }
 
-/* Style the list inside the menu */
-nav ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-article {
-    float: left;
+/* Style different box containers for buy, sell, and model health */
+.container {
+    float: right;
     padding: 20px;
-    width: 70%;
+    width: 65%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-right: 15px;
     background-color: #f1f1f1;
-    height: 300px; /* only for demonstration, should be removed */
 }
 
 /* Clear floats after the columns */
