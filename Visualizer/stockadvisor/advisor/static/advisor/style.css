@@ -24,6 +24,7 @@ aside {
     margin-bottom: 15px;
     margin-left: 15px;
     padding: 20px;
+    list-style-type:none /* no bullets next to list items */
 }
 
 /* Style different box containers for buy, sell, and model health */
