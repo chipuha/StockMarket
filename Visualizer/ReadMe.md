@@ -13,8 +13,21 @@ python manage.py runserver
 ```
  Then go to http://127.0.0.1:8000/admin. Sign in with username: rasmusson and password: stockadvisor
 
-## Current Project Structure
+## Current Project Status
 Django projects have a main web app manging level (stockadvisor folder) then plugable "apps". So far this project has the high level manging folder files. Main (and only) app is advisor app. The app uses a template view that is passed in a ticker symbol which is displays on the second header of the page.
+
+* **View**:
+Home (index) view mostly complete. Need to finish styling and moving the search bar
+
+* **Model**:
+This model setup has stocks as the primary class. For example, if there are 5 stocks and 4 types of models, there will be 5 stock instances and 20 stock model instances. Not sure the best way to save dataframes of data into database...
+
+Class Stock Models: name, the stock's ticker the model is associated with, buy signal, sell signal, hold signal
+Class Stock: name, ticker, sell signal, buy signal, hold signal, time series-data
+Class TimeSeries: name (label like price, close, etc.), stock it's associated with, data float values
+
+* **Controller**:
+Buy, sell, and model health button will take you to their respective sections of the webpage.
 
 ## Construction Phases
 
