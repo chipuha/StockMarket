@@ -9,7 +9,7 @@ import os
 import pandas as pd
 import time
 
-from Models import sma
+from Models.sma import sma
 
 app = dash.Dash('stock-advisor')
 server = app.server
@@ -63,14 +63,14 @@ app.layout = html.Div([
             min=2,
             max=50,
             value=2,
-            marks={[x for x in range(2,50,4)]}
+            marks={x: x for x in range(2,50,4)}
         ),
         dcc.Slider(
             id='sma-slider-long',
             min=10,
             max=200,
             value=10,
-            marks={[x for x in range(10,200,10)]}
+            marks={x: x for x in range(10,200,10)}
         )
     ]),
     html.Div(id='sma')
@@ -134,25 +134,26 @@ def update_graph(tickers):
         [dash.dependencies.Input('stock-ticker-input','value'),
          dash.dependencies.Input('sma-slider-short','value'),
          dash.dependencies.Input('sma-slider-long','value')])
-def sma(tickers,short,long):
+def sma_model(tickers,short,long):
+    print('short:',short,'long:',long)
     for ticker in tickers:
         #import needed data
         df = pd.read_csv('Data/CSVs/'+ticker+'.csv')
         #create sma model
-        sma(ticker,df)
-        sma.createSMA(short,long)
+        sma1 = sma(ticker,df)
+        sma1.createSMA(short,long)
         #extract dataframe to be plotted ('short_mavg' and 'long_mavg' columns)
-        df_sma = sma.signals
+        df_sma = sma1.signals
         
         #convert data into figure plot
         short_mavg = [{
-                'x': df['Date'], 'y': sma.signals['short_mavg'],
+                'x': df['Date'], 'y': sma1.signals['short_mavg'],
                 'type': 'scatter', 'mode':'lines',
                 'name': 'Short Moving Ave',
                 'legendgroup': 'Short Moving Ave',
                 }]
         long_mavg = [{
-                'x': df['Date'], 'y': sma.signals['long_mavg'],
+                'x': df['Date'], 'y': sma1.signals['long_mavg'],
                 'type': 'scatter', 'mode':'lines',
                 'name': 'Long Moving Ave',
                 'legendgroup': 'Long Moving Ave',

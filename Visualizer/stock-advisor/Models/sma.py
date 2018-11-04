@@ -9,7 +9,7 @@
 import datetime
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
+#Gimport matplotlib.pyplot as plt
 import pandas_datareader as pdr
 
 #trying new plotting library
@@ -48,9 +48,9 @@ class sma:
         
         #matplotlib version (not interactive)
         self.df['Close'].plot(grid=True,figsize=(12,8))
-        plt.title(ticker)
-        plt.ylabel('Price $')
-        plt.show()
+#       plt.title(ticker)
+#        plt.ylabel('Price $')
+#        plt.show()
         
     #Creates moving average over small and long window.
     #Creates buy and sell signals based on whether small and long windows cross
@@ -70,6 +70,7 @@ class sma:
 
         # Generate trading orders
         self.signals['positions'] = self.signals['signal'].diff()
+
 
     #Plots the Closing price vs. Datetime of the stock, short moving average, and long moving average
     #Plots are done in matplotlib and bokeh
@@ -105,7 +106,7 @@ class sma:
         #p.circle(signals.loc[signals.positions == -1.0].index,
         #         signals.loc[signals.positions == -1.0],size=30, color="red", alpha=0.5)
         show(p)
-    
+
     #Tracks capital change if you were to follow this strategy
     #Initial_capital is how much money you start with.
     #Interally, 10 stocks will be sold or bought at a time. This can be changed
@@ -134,9 +135,10 @@ class sma:
         # Add `returns` to portfolio
         self.portfolio['returns'] = self.portfolio['total'].pct_change()
 
-        fig = plt.figure()
-        ax1 = fig.add_subplot(111, ylabel='Portfolio value in $')
-        self.portfolio['total'].plot(ax=ax1, lw=2.)
+        #fig = plt.figure()
+        #ax1 = fig.add_subplot(111, ylabel='Portfolio value in $')
+        #self.portfolio['total'].plot(ax=ax1, lw=2.)
+        
         # Plot the "buy" trades against the equity curve
         #ax1.plot(self.portfolio.loc[signals.(self.positions) == 1.0].index, 
         #         self.portfolio.total[signals.(self.positions) == 1.0],
@@ -145,7 +147,8 @@ class sma:
         #ax1.plot(self.portfolio.loc[signals.(self.positions) == -1.0].index, 
         #         self.portfolio.total[signals.(self.positions) == -1.0],
         #         'v', markersize=10, color='k')
-        plt.show()
+        
+        #plt.show()
         
         # Bohek plot (interactive)
         #output_notebook() #puts plot inside notebook instead of making it in a new browser tab
