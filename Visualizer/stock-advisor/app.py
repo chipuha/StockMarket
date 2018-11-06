@@ -71,9 +71,20 @@ app.layout = html.Div([
             max=200,
             value=10,
             marks={x: x for x in range(10,200,10)}
-        )
+        ),
     ]),
-    html.Div(id='sma')
+    html.Div(id='sma'),
+    html.H2('Bottom',
+            style={'display': 'inline',
+                   'float': 'left',
+                   'font-size': '2.65em',
+                   'margin-left': '7px',
+                   'font-weight': 'bolder',
+                   'font-family': 'Product Sans',
+                   'color': "rgba(107, 107, 107, 0.95)",
+                   'margin-top': '20px',
+                   'margin-bottom': '0'
+            }),
 ], className="container")
 
 
@@ -135,7 +146,6 @@ def update_graph(tickers):
          dash.dependencies.Input('sma-slider-short','value'),
          dash.dependencies.Input('sma-slider-long','value')])
 def sma_model(tickers,short,long):
-    print('short:',short,'long:',long)
     for ticker in tickers:
         #import needed data
         df = pd.read_csv('Data/CSVs/'+ticker+'.csv')
@@ -167,7 +177,7 @@ def sma_model(tickers,short,long):
     return {
         'data': short_mavg+long_mavg+close,
         'layout': {
-            'margin': {'b': 0, 'r': 10, 'l': 60, 't': 0}
+            'margin': {'b': 10, 'r': 10, 'l': 60, 't': 10}
         }}
 
 
