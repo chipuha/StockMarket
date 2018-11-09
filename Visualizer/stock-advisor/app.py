@@ -155,6 +155,7 @@ def sma_model(tickers,short,long):
         sma1.createSMA(short,long)
         #extract dataframe to be plotted ('short_mavg' and 'long_mavg' columns)
         df_sma = sma1.signals
+        sma1.getSignal()
         
         #convert data into figure plot
         short_mavg = [{

@@ -1,6 +1,6 @@
 # coding: utf-8
 
-# # Simple Moving Average
+# Simple Moving Average
 # 
 # Object implimentation is at the beginning, examples follow.
 
@@ -41,16 +41,16 @@ class sma:
     #Plots the Closing price vs. Datetime in matplotlib and bokeh
     def plotDF(self):
         #iteractive bokeh plot
-        #output_notebook() #puts plot inside notebook instead of making it in a new browser tab
+        output_notebook() #puts plot inside notebook instead of making it in a new browser tab
         p = figure(title=self.ticker,x_axis_type='datetime',y_axis_label='Price $')
         p.line(self.df.index.values,self.df['Close'])
         show(p)
         
         #matplotlib version (not interactive)
         self.df['Close'].plot(grid=True,figsize=(12,8))
-#       plt.title(ticker)
-#        plt.ylabel('Price $')
-#        plt.show()
+        plt.title(ticker)
+        plt.ylabel('Price $')
+        plt.show()
         
     #Creates moving average over small and long window.
     #Creates buy and sell signals based on whether small and long windows cross
@@ -101,10 +101,10 @@ class sma:
         p.legend.click_policy="hide"
 
         ##(need to figure out how to add the buy and sell signals)
-        #p.circle(signals.loc[signals.positions == 1.0].index,
-        #         signals.loc[signals.positions == 1.0],size=30, color="green", alpha=0.5)
-        #p.circle(signals.loc[signals.positions == -1.0].index,
-        #         signals.loc[signals.positions == -1.0],size=30, color="red", alpha=0.5)
+        p.circle(signals.loc[signals.positions == 1.0].index,
+                 signals.loc[signals.positions == 1.0],size=30, color="green", alpha=0.5)
+        p.circle(signals.loc[signals.positions == -1.0].index,
+                 signals.loc[signals.positions == -1.0],size=30, color="red", alpha=0.5)
         show(p)
 
     #Tracks capital change if you were to follow this strategy
@@ -135,9 +135,9 @@ class sma:
         # Add `returns` to portfolio
         self.portfolio['returns'] = self.portfolio['total'].pct_change()
 
-        #fig = plt.figure()
-        #ax1 = fig.add_subplot(111, ylabel='Portfolio value in $')
-        #self.portfolio['total'].plot(ax=ax1, lw=2.)
+        fig = plt.figure()
+        ax1 = fig.add_subplot(111, ylabel='Portfolio value in $')
+        self.portfolio['total'].plot(ax=ax1, lw=2.)
         
         # Plot the "buy" trades against the equity curve
         #ax1.plot(self.portfolio.loc[signals.(self.positions) == 1.0].index, 
@@ -147,19 +147,18 @@ class sma:
         #ax1.plot(self.portfolio.loc[signals.(self.positions) == -1.0].index, 
         #         self.portfolio.total[signals.(self.positions) == -1.0],
         #         'v', markersize=10, color='k')
-        
-        #plt.show()
+        plt.show()
         
         # Bohek plot (interactive)
-        #output_notebook() #puts plot inside notebook instead of making it in a new browser tab
+        output_notebook() #puts plot inside notebook instead of making it in a new browser tab
         p = figure(title=self.ticker, x_axis_type='datetime', y_axis_label='Price $')
         p.line(self.df.index.values, self.portfolio['total'], color='red', legend='Total Profit $')
         p.legend.click_policy="hide"
         ##(need to figure out how to add the buy and sell signals)
-        #p.circle(signals.loc[signals.positions == 1.0].index,
-        #         signals.loc[signals.positions == 1.0],size=30, color="green", alpha=0.5)
-        #p.circle(signals.loc[signals.positions == -1.0].index,
-        #         signals.loc[signals.positions == -1.0],size=30, color="red", alpha=0.5)
+        p.circle(signals.loc[signals.positions == 1.0].index,
+                 signals.loc[signals.positions == 1.0],size=30, color="green", alpha=0.5)
+        p.circle(signals.loc[signals.positions == -1.0].index,
+                 signals.loc[signals.positions == -1.0],size=30, color="red", alpha=0.5)
         show(p)
     
     #Calculates and prints Sharpe Ratio
@@ -199,6 +198,17 @@ class sma:
         days = (self.df.index[-1] - self.df.index[0]).days
         cagr = ((((self.df['Close'][-1]) / self.df['Close'][1])) ** (365.0/days)) - 1
         print("Compound Annual Growth Rate:",cagr)
+    
+    #Determine whether it's a buy or sell signal
+    #If short_mavg goes above long_mavg, it's a buy
+    #If short_mavg goes below long_mavg, it's a sell
+    #The longer it's been since a signal compared to the time different the 
+    #window choice will decay the signal strength
+    def getSignal(self):
+        print(self.signals['positions'].tail(20))
+        #filtered = self.signals['position'].replace(0,NaN)
+    
+        
 '''
 ticker = 'MSFT'
 start = datetime.datetime(2017, 6, 19)
