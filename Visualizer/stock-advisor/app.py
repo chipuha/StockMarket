@@ -56,24 +56,25 @@ app.layout = html.Div([
         multi=True
     ),
     html.Div(id='stock-graphs'), #view stock prices
-    html.Div([ #view SMA for the selected stock
-        dcc.Graph(id='sma-graph'),
-        dcc.Slider(
-            id='sma-slider-short',
-            min=2,
-            max=50,
-            value=2,
-            marks={x: x for x in range(2,50,4)}
-        ),
-        dcc.Slider(
-            id='sma-slider-long',
-            min=10,
-            max=200,
-            value=10,
-            marks={x: x for x in range(10,200,10)}
-        ),
+    html.Div([
+        html.Div(dcc.Graph(id='sma-graph')),
+        html.Div(
+            dcc.Slider(
+                id='sma-slider-short',
+                min=2,
+                max=50,
+                value=2,
+                marks={x: x for x in range(2,50,4)}
+        ), style = {'padding': '30px 10px 20px 10px'}),
+        html.Div(
+            dcc.Slider(
+                id='sma-slider-long',
+                min=10,
+                max=200,
+                value=50,
+                marks={x: x for x in range(10,200,10)}
+            ), style = {'padding': '20px 10px 30px 10px'}),
     ]),
-    html.Div(id='sma'),
     html.H2('Bottom',
             style={'display': 'inline',
                    'float': 'left',
@@ -132,7 +133,7 @@ def update_graph(tickers):
                 figure={
                     'data': [candlestick] + bollinger_traces,
                     'layout': {
-                        'margin': {'b': 0, 'r': 10, 'l': 60, 't': 0},
+                        'margin': {'b': 30, 'r': 30, 'l': 30, 't': 10},
                         'legend': {'x': 0}
                     }
                 }
@@ -177,7 +178,8 @@ def sma_model(tickers,short,long):
     return {
         'data': short_mavg+long_mavg+close,
         'layout': {
-            'margin': {'b': 10, 'r': 10, 'l': 60, 't': 10}
+            'margin': {'b': 30, 'r': 30, 'l': 30, 't': 10},
+            'legend': {'x': 0}
         }}
 
 
