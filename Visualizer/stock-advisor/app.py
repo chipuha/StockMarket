@@ -57,7 +57,7 @@ app.layout = html.Div([
     ),
     html.Div(id='stock-graphs'), #view stock prices
     html.Div([
-        html.Div(dcc.Graph(id='sma-graph')),
+        html.Div(id='sma-model'),
         html.Div(
             dcc.Slider(
                 id='sma-slider-short',
@@ -142,11 +142,14 @@ def update_graph(tickers):
 
 #functionality for SMA model
 @app.callback(
-        dash.dependencies.Output('sma-graph','figure'),
+        dash.dependencies.Output('sma-model','children'),
         [dash.dependencies.Input('stock-ticker-input','value'),
          dash.dependencies.Input('sma-slider-short','value'),
          dash.dependencies.Input('sma-slider-long','value')])
 def sma_model(tickers,short,long):
+    html_components = []
+    html_components.append(html.H2("Simple Moving Average Model",
+            style={'marginTop': 20, 'marginBottom': 20}))
     for ticker in tickers:
         #import needed data
         df = pd.read_csv('Data/CSVs/'+ticker+'.csv')
@@ -176,12 +179,17 @@ def sma_model(tickers,short,long):
                 'name': 'Close',
                 'legendgroup': 'Close',
                 }]
-    return {
-        'data': short_mavg+long_mavg+close,
-        'layout': {
-            'margin': {'b': 30, 'r': 30, 'l': 30, 't': 10},
-            'legend': {'x': 0}
-        }}
+    html_components.append(dcc.Graph(
+        id='sma-'+ticker+'-graph',
+        figure={
+            'data': short_mavg+long_mavg+close,
+            'layout': {
+                'margin': {'b': 30, 'r': 30, 'l': 30, 't': 10},
+                'legend': {'x': 0}
+            }
+        }
+    ))
+    return html_components
 
 
 #Extra styling stuff
