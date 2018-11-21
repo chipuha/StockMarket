@@ -170,10 +170,21 @@ def sma_model(tickers,short,long):
             df_sma = sma1.signals
             signal = sma1.getSignal()
             
-            html_components.append(html.H3(
-                "Signal: "+signal,
-                style={'marginTop': 20, 'marginBottom': 20}
-            ))
+            if signal == 'buy':
+                html_components.append(html.H3(
+                    signal,
+                    style={'marginTop': 20, 'marginBottom': 20, 'color':'green', 'text-transform': 'uppercase'}
+                ))
+            elif signal == 'sell':
+                html_components.append(html.H3(
+                    signal,
+                    style={'marginTop': 20, 'marginBottom': 20, 'color':'red', 'text-transform': 'uppercase'}
+                ))
+            else:
+                html_components.append(html.H3(
+                    signal,
+                    style={'marginTop': 20, 'marginBottom': 20, 'text-transform': 'uppercase'}
+                ))
         
             #convert data into figure plot
             short_mavg = [{
