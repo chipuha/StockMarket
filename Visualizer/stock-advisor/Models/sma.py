@@ -205,9 +205,18 @@ class sma:
     #The longer it's been since a signal compared to the time different the 
     #window choice will decay the signal strength
     def getSignal(self):
-        print(self.signals['positions'].tail(20))
-        #filtered = self.signals['position'].replace(0,NaN)
-    
+        #extract last value -1 is sell, 1 is buy
+        try:
+            sig = self.signals['positions'].nonzero()[0]
+            sig = self.signals['positions'].iloc[sig]
+            last_signal = sig.tail(1).item()
+            if last_signal == -1:
+                return 'sell'
+            elif last_signal == 1:
+                return 'buy'
+        except:
+            return 'none'
+
         
 '''
 ticker = 'MSFT'

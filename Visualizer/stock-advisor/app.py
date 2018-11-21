@@ -36,7 +36,7 @@ def bbands(price, window_size=10, num_of_std=3):
 
 app.layout = html.Div([
     html.Div([
-        html.H2('Stock Advisor',
+        html.H1('Stock Advisor',
                 style={'display': 'inline',
                        'float': 'left',
                        'font-size': '2.65em',
@@ -54,6 +54,10 @@ app.layout = html.Div([
                  for s in zip(tickerList, tickerList)],
         value=['AAPL'],
         multi=True
+    ),
+    html.H2(
+        "Stock Prices",
+        style={'marginTop': 20, 'marginBottom': 20}
     ),
     html.Div(id='stock-graphs'), #view stock prices
     html.Div([
@@ -150,45 +154,56 @@ def sma_model(tickers,short,long):
     html_components = []
     html_components.append(html.H2("Simple Moving Average Model",
             style={'marginTop': 20, 'marginBottom': 20}))
-    for ticker in tickers:
-        #import needed data
-        df = pd.read_csv('Data/CSVs/'+ticker+'.csv')
-        #create sma model
-        sma1 = sma(ticker,df)
-        sma1.createSMA(short,long)
-        #extract dataframe to be plotted ('short_mavg' and 'long_mavg' columns)
-        df_sma = sma1.signals
-        sma1.getSignal()
+    if not tickers:
+        html_components.append(html.H3(
+            "Select a stock ticker.",
+            style={'marginTop': 20, 'marginBottom': 20}
+        ))
+    else:
+        for ticker in tickers:
+            #import needed data
+            df = pd.read_csv('Data/CSVs/'+ticker+'.csv')
+            #create sma model
+            sma1 = sma(ticker,df)
+            sma1.createSMA(short,long)
+            #extract dataframe to be plotted ('short_mavg' and 'long_mavg' columns)
+            df_sma = sma1.signals
+            signal = sma1.getSignal()
+            
+            html_components.append(html.H3(
+                "Signal: "+signal,
+                style={'marginTop': 20, 'marginBottom': 20}
+            ))
         
-        #convert data into figure plot
-        short_mavg = [{
+            #convert data into figure plot
+            short_mavg = [{
                 'x': df['Date'], 'y': sma1.signals['short_mavg'],
                 'type': 'scatter', 'mode':'lines',
                 'name': 'Short Moving Ave',
                 'legendgroup': 'Short Moving Ave',
                 }]
-        long_mavg = [{
+            long_mavg = [{
                 'x': df['Date'], 'y': sma1.signals['long_mavg'],
                 'type': 'scatter', 'mode':'lines',
                 'name': 'Long Moving Ave',
                 'legendgroup': 'Long Moving Ave',
                 }]
-        close = [{
+            close = [{
                 'x': df['Date'], 'y': df['Close'],
                 'type': 'scatter', 'mode':'lines',
-                'name': 'Close',
-                'legendgroup': 'Close',
+                'name': ticker+' Close',
+                'legendgroup': ticker+' Close',
                 }]
-    html_components.append(dcc.Graph(
-        id='sma-'+ticker+'-graph',
-        figure={
-            'data': short_mavg+long_mavg+close,
-            'layout': {
-                'margin': {'b': 30, 'r': 30, 'l': 30, 't': 10},
-                'legend': {'x': 0}
-            }
-        }
-    ))
+            html_components.append(dcc.Graph(
+                id='sma-'+ticker+'-graph',
+                figure={
+                    'data': short_mavg+long_mavg+close,
+                    'layout': {
+                        'margin': {'b': 30, 'r': 30, 'l': 30, 't': 10},
+                        'legend': {'x': 0}
+                    }
+                }
+            ))
     return html_components
 
 
