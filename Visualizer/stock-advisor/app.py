@@ -10,6 +10,8 @@ import pandas as pd
 import time
 
 from Models.sma import sma
+from Data.GetStockData import YahooFinanceHistory as yfh
+from Data.GetStockData import PandasDataReaderHistory as pdrh
 
 app = dash.Dash('stock-advisor')
 server = app.server
@@ -37,23 +39,30 @@ def bbands(price, window_size=10, num_of_std=3):
 app.layout = html.Div([
     html.Div([
         html.H1('Stock Advisor',
-                style={'display': 'inline',
-                       'float': 'left',
-                       'font-size': '2.65em',
-                       'margin-left': '7px',
-                       'font-weight': 'bolder',
-                       'font-family': 'Product Sans',
-                       'color': "rgba(107, 107, 107, 0.95)",
-                       'margin-top': '20px',
-                       'margin-bottom': '0'
-                       }),
-            ]),
+            style={'display': 'inline',
+                'float': 'left',
+                'font-size': '2.65em',
+                'margin-left': '15px',
+                'font-weight': 'bolder',
+                'font-family': 'Product Sans',
+                'color': "rgba(107, 107, 107, 0.95)",
+                'margin-top': '20px',
+                'margin-bottom': '0'
+                }),
+        ]),
     dcc.Dropdown(
         id='stock-ticker-input',
         options=[{'label': s[0], 'value': str(s[1])}
                  for s in zip(tickerList, tickerList)],
         value=['AAPL'],
         multi=True
+    ),
+    html.Div(id='empty', style={'display': 'none'}),
+    html.Button(
+        id='update-data',
+        n_clicks=0,
+        children='Update Data',
+        style={'margin': '30px 0px 30px 30px'}
     ),
     html.H2(
         "Stock Prices",
@@ -83,7 +92,7 @@ app.layout = html.Div([
             style={'display': 'inline',
                    'float': 'left',
                    'font-size': '2.65em',
-                   'margin-left': '7px',
+                   'margin-left': '15px',
                    'font-weight': 'bolder',
                    'font-family': 'Product Sans',
                    'color': "rgba(107, 107, 107, 0.95)",
@@ -91,6 +100,15 @@ app.layout = html.Div([
                    'margin-bottom': '0'
             }),
 ], className="container")
+
+#update data button
+@app.callback(dash.dependencies.Output('empty', 'children'),
+              [dash.dependencies.Input('update-data', 'n_clicks'),
+               dash.dependencies.Input('stock-ticker-input', 'value')])
+def update_data(n_clicks,tickers):
+    for ticker in tickers:
+        print(ticker)
+        data = pdrh(ticker)
 
 
 #functionallity for plotting stock price plots
@@ -224,7 +242,9 @@ external_css = ["https://fonts.googleapis.com/css?family=Product+Sans:400,400i,7
 
 for css in external_css:
     app.css.append_css({"external_url": css})
-
+    
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+app.css.append_css({"external_url":external_stylesheets})
 
 if 'DYNO' in os.environ:
     app.scripts.append_script({
