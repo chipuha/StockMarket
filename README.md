@@ -1,5 +1,5 @@
 # StockMarket
-Many models can be used to make predictions instead of one "golden" or "magic" model. This notebook includes code for multiple models--each with different strengths and weaknesses:
+Many models can be used to make predictions instead of one "golden" or "magic" model. This notebook includes code for multiple models--each with different strengths and weaknesses. Data needed for each model can be found under the Data folder. To update the data, simply run the GetStockData.py script with python 3. If you would like to get data for a ticker not already included, add the ticker symbol to the TickersToTrack.txt file and run GetStockData.py.
 
 ### Simple Moving Average
 
