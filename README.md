@@ -5,7 +5,7 @@ Many models can be used to make predictions instead of one "golden" or "magic" m
 
 * What an SMA tells you: trends but does not predict future prices.
 * Strength: This confirms past trends.
-* Weakness: Does not predict future. Sensitive to the time you average over.
+* Weakness: Does not predict future. Results are sensitive to the averaging window.
 * Inputs: Stock prices over time
 * Output: Long moving average and short moving average data, buy and sell signals, and signal strength is determined by time it’s been since a signal.
 * Steps needed: 
