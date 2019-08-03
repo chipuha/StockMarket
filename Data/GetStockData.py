@@ -44,40 +44,58 @@ class YahooFinanceHistory:
         # --- new line below ---
         #Modified to force numerical values to be float types and avoid object type. added by AJ
         return pd.read_csv(StringIO(response.text), parse_dates=['Date'],na_values='.')
-   
-filename="DowJonesTickers.txt"
-print('getting tickers from '+filename)
+
+# --- UPDATE TICKER DATA ---
+filename="TickersToTrack.txt"
+print('Fetching data for tickers in '+filename)
 file=open(filename,"r")
-total = 0 #track total number of tickers processed
-alreadyUpToDate = [] #track how many files were already up to date
-updated = [] #track how many files were updated
-errored = [] #track which stocks were has errors
+total = 0 #total number of tickers processed (attempted)
+alreadyUpToDate = [] #track which tickers were already up to date
+updated = [] #track which tickers were updated
+errored = [] #track which tickers encounted errors
+
 for ticker in file:
     ticker=ticker.strip('\n')
-    outputfilename=ticker+'.csv'
+    outputfilename='data/'+ticker+'.csv'
     total = total+1
     try: #check if file exists
-        df = pd.read_csv(ticker+'.csv')
+        df = pd.read_csv('data/'+ticker+'.csv')
         #update file if it exists
-        #check if the df's latest date is today's date, otherwise update
-        if df['Date'].tail(1).item()==date.today().__str__():
-            #print('already up to date') #do nothing
+        #check if the df's latest date is yesterday's date, otherwise update
+        days_back = (date.today()-datetime.strptime(df['Date'].tail(1).item(),"%Y-%m-%d").date()).days
+        yesterday = datetime.strftime(datetime.now()-timedelta(1), "%Y-%m-%d")
+        if df['Date'].tail(1).item()==yesterday:
+            print(ticker,'is already up to date') #do nothing
+            alreadyUpToDate.append(ticker)
+        elif days_back <= 2 and date.today().weekday() > 4: #check that's it's not a weekend
+            print(ticker,'is update to date enough. Try again Monday')
             alreadyUpToDate.append(ticker)
         else:
-            days_back = (date.today()-datetime.strptime(df['Date'].tail(1).item(),"%Y-%m-%d").date()).days
-            df2 = YahooFinanceHistory(ticker, days_back=days_back).get_quote()
-            df = df.append(df2)
-            df.to_csv(path_or_buf=outputfilename)
-            updated.append(ticker)
-    except: #if file doesn't exist, make it
+            try:
+                print(ticker,'is updating')
+                df2 = YahooFinanceHistory(ticker, days_back=days_back).get_quote()
+                print('Date:',df2.head(1)['Date'])
+                df2['Date'] = df2['Date'].dt.strftime("%Y-%m-%d")
+                print('Date modified:',df2.head(1)['Date'])
+                df = pd.concat([df,df2], join='inner', ignore_index=True)
+                df = df.reset_index(drop=True)
+                df.to_csv(path_or_buf=outputfilename)
+                updated.append(ticker)
+            except (urllib.error.HTTPError, requests.exceptions.HTTPError) as err:
+                print('HTTP error for '+ticker)
+                errored.append(ticker)
+    except (FileNotFoundError) as err: #if file doesn't exist, make it
         try:
-            df = YahooFinanceHistory(ticker, days_back=365*10).get_quote()
+            print(ticker+' is getting a new file and updating')
+            days_back = 365*1
+            df = YahooFinanceHistory(ticker, days_back=days_back).get_quote()
             df.to_csv(path_or_buf=outputfilename)
             updated.append(ticker)
-        except (urllib.error.HTTPError,urllib.error.HTTPSConnectionPool) as err:
+        except (urllib.error.HTTPError, requests.exceptions.HTTPError) as err:
             print('HTTP error for '+ticker)
-            print('Moving on to next ticker')
             errored.append(ticker)
+file.close()
+
 #print download diagnostics
 print(str(len(alreadyUpToDate))+' out of '+str(total)+' were already up-to-date')
 print(str(len(updated))+' out of '+str(total)+' were updated')
