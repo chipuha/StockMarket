@@ -10,7 +10,7 @@ import datetime
 import pandas as pd
 import numpy as np
 #Gimport matplotlib.pyplot as plt
-import pandas_datareader as pdr
+#import pandas_datareader as pdr
 
 #trying new plotting library
 from bokeh.plotting import figure, output_file, show
@@ -41,7 +41,7 @@ class sma:
     #Plots the Closing price vs. Datetime in matplotlib and bokeh
     def plotDF(self):
         #iteractive bokeh plot
-        output_notebook() #puts plot inside notebook instead of making it in a new browser tab
+        #output_notebook() #puts plot inside notebook instead of making it in a new browser tab
         p = figure(title=self.ticker,x_axis_type='datetime',y_axis_label='Price $')
         p.line(self.df.index.values,self.df['Close'])
         show(p)
@@ -102,9 +102,9 @@ class sma:
 
         ##(need to figure out how to add the buy and sell signals)
         p.circle(signals.loc[signals.positions == 1.0].index,
-                 signals.loc[signals.positions == 1.0],size=30, color="green", alpha=0.5)
+                 signals.loc[signals.positions == 1.0].short_mavg, size=15, color="green", alpha=0.9)
         p.circle(signals.loc[signals.positions == -1.0].index,
-                 signals.loc[signals.positions == -1.0],size=30, color="red", alpha=0.5)
+                 signals.loc[signals.positions == -1.0].short_mavg, size=15, color="red", alpha=0.9)
         show(p)
 
     #Tracks capital change if you were to follow this strategy

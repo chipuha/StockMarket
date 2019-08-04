@@ -10,8 +10,7 @@ import pandas as pd
 import time
 
 from Models.sma import sma
-from Data.GetStockData import YahooFinanceHistory as yfh
-from Data.GetStockData import PandasDataReaderHistory as pdrh
+import Data.GetStockData
 
 app = dash.Dash('stock-advisor')
 server = app.server
@@ -21,8 +20,8 @@ app.scripts.config.serve_locally = False
 
 colorscale = cl.scales['9']['qual']['Paired']
 
-#find list of tickers (should be under Data/DowJonesTickers.txt
-filename="Data/DowJonesTickers.txt"
+#find list of tickers (should be under Data/TickersToTrack.txt
+filename="Data/TickersToTrack.txt"
 print('getting tickers from '+filename)
 file=open(filename,"r")
 tickerList = []
@@ -106,10 +105,8 @@ app.layout = html.Div([
               [dash.dependencies.Input('update-data', 'n_clicks'),
                dash.dependencies.Input('stock-ticker-input', 'value')])
 def update_data(n_clicks,tickers):
-    for ticker in tickers:
-        print(ticker)
-        data = pdrh(ticker)
-
+    print('updating data...')
+    import Data.GetStockData
 
 #functionallity for plotting stock price plots
 @app.callback(
@@ -126,7 +123,7 @@ def update_graph(tickers):
     else:
         for i, ticker in enumerate(tickers):
             print('ticker: ',ticker)
-            df = pd.read_csv('Data/CSVs/'+ticker+'.csv')
+            df = pd.read_csv('Data/Data/'+ticker+'.csv')
 
             candlestick = {
                 'x': df['Date'],
@@ -180,13 +177,16 @@ def sma_model(tickers,short,long):
     else:
         for ticker in tickers:
             #import needed data
-            df = pd.read_csv('Data/CSVs/'+ticker+'.csv')
+            df = pd.read_csv('Data/Data/'+ticker+'.csv')
+            df['Date']=pd.to_datetime(df['Date'])
+            df = df.set_index(df['Date'], drop=True) #index by date
             #create sma model
             sma1 = sma(ticker,df)
             sma1.createSMA(short,long)
             #extract dataframe to be plotted ('short_mavg' and 'long_mavg' columns)
             df_sma = sma1.signals
             signal = sma1.getSignal()
+            print('column names',sma1.signals.columns)
             
             if signal == 'buy':
                 html_components.append(html.H3(
@@ -223,10 +223,20 @@ def sma_model(tickers,short,long):
                 'name': ticker+' Close',
                 'legendgroup': ticker+' Close',
                 }]
+            markers_buy = [{
+                'x':sma1.signals.loc[sma1.signals.positions == 1.0].index, 'y': sma1.signals.loc[sma1.signals.positions == 1.0].short_mavg,
+                'mode':'markers',
+                'marker': {'size': 15, 'color': 'green'}
+                }]
+            markers_sell = [{
+                'x':sma1.signals.loc[sma1.signals.positions == -1.0].index, 'y': sma1.signals.loc[sma1.signals.positions == -1.0].short_mavg,
+                'mode':'markers',
+                'marker': {'size': 15, 'color': 'red'}
+                }]
             html_components.append(dcc.Graph(
                 id='sma-'+ticker+'-graph',
                 figure={
-                    'data': short_mavg+long_mavg+close,
+                    'data': short_mavg+long_mavg+close+markers_buy+markers_sell,
                     'layout': {
                         'margin': {'b': 30, 'r': 30, 'l': 30, 't': 10},
                         'legend': {'x': 0}
@@ -253,4 +263,4 @@ if 'DYNO' in os.environ:
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=False)
