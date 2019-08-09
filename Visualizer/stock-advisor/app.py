@@ -181,11 +181,11 @@ def sma_model(tickers,short,long):
             df['Date']=pd.to_datetime(df['Date'])
             df = df.set_index(df['Date'], drop=True) #index by date
             #create sma model
-            sma1 = sma(ticker,df)
+            sma1 = sma(df)
             sma1.createSMA(short,long)
             #extract dataframe to be plotted ('short_mavg' and 'long_mavg' columns)
             df_sma = sma1.signals
-            signal = sma1.getSignal()
+            signal = sma1.getCurrentSignal()
             print('column names',sma1.signals.columns)
             
             if signal == 'buy':

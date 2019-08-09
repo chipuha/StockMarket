@@ -13,8 +13,8 @@ import numpy as np
 #import pandas_datareader as pdr
 
 #trying new plotting library
-from bokeh.plotting import figure, output_file, show
-from bokeh.io import output_notebook
+#from bokeh.plotting import figure, output_file, show
+#from bokeh.io import output_notebook
 
 
 # ## The simple moving average object
@@ -27,8 +27,7 @@ from bokeh.io import output_notebook
 
 class sma:
     
-    def __init__(self, ticker, df): #executed when an sma object in created
-        self.ticker = ticker   #must be all caps string (e.g. "MSFT")
+    def __init__(self, df): #executed when an sma object in created
         self.df = df
         self.signals = pd.DataFrame(index=self.df.index)
         
@@ -39,7 +38,7 @@ class sma:
         return self.df.tail(length)
     
     #Plots the Closing price vs. Datetime in matplotlib and bokeh
-    def plotDF(self):
+    '''def plotDF(self):
         #iteractive bokeh plot
         #output_notebook() #puts plot inside notebook instead of making it in a new browser tab
         p = figure(title=self.ticker,x_axis_type='datetime',y_axis_label='Price $')
@@ -50,7 +49,7 @@ class sma:
         self.df['Close'].plot(grid=True,figsize=(12,8))
         plt.title(ticker)
         plt.ylabel('Price $')
-        plt.show()
+        plt.show()'''
         
     #Creates moving average over small and long window.
     #Creates buy and sell signals based on whether small and long windows cross
@@ -72,9 +71,28 @@ class sma:
         self.signals['positions'] = self.signals['signal'].diff()
 
 
+    #Determine whether it's a buy or sell signal
+    #If short_mavg goes above long_mavg, it's a buy
+    #If short_mavg goes below long_mavg, it's a sell
+    #The longer it's been since a signal compared to the time different the 
+    #window choice will decay the signal strength
+    def getCurrentSignal(self):
+        #extract last value -1 is sell, 1 is buy
+        try:
+            sig = self.signals['positions'].nonzero()[0]
+            sig = self.signals['positions'].iloc[sig]
+            last_signal = sig.tail(1).item()
+            if last_signal == -1:
+                return 'sell'
+            elif last_signal == 1:
+                return 'buy'
+        except:
+            return 'none'
+        
+        
     #Plots the Closing price vs. Datetime of the stock, short moving average, and long moving average
     #Plots are done in matplotlib and bokeh
-    def plotSMA(self): #plot price with SMA short and long windows. For now, buy sell signals are not included
+    '''def plotSMA(self): #plot price with SMA short and long windows. For now, buy sell signals are not included
         fig = plt.figure()
         ax1 = fig.add_subplot(111, ylabel='Price in $')
         self.df['Close'].plot(ax=ax1, color='r', lw=2.)
@@ -105,12 +123,12 @@ class sma:
                  signals.loc[signals.positions == 1.0].short_mavg, size=15, color="green", alpha=0.9)
         p.circle(signals.loc[signals.positions == -1.0].index,
                  signals.loc[signals.positions == -1.0].short_mavg, size=15, color="red", alpha=0.9)
-        show(p)
+        show(p)'''
 
     #Tracks capital change if you were to follow this strategy
     #Initial_capital is how much money you start with.
     #Interally, 10 stocks will be sold or bought at a time. This can be changed
-    def createBackTest(self, initial_capital):
+    '''def createBackTest(self, initial_capital):
         # Set the initial capital
         initial_capital= float(initial_capital)
 
@@ -159,11 +177,11 @@ class sma:
                  signals.loc[signals.positions == 1.0],size=30, color="green", alpha=0.5)
         p.circle(signals.loc[signals.positions == -1.0].index,
                  signals.loc[signals.positions == -1.0],size=30, color="red", alpha=0.5)
-        show(p)
+        show(p)'''
     
     #Calculates and prints Sharpe Ratio
     #Calculates and plots maximum and daily drawdown in matplotlib and bokeh
-    def evaluation(self):
+    '''def evaluation(self):
         returns = self.portfolio['returns']
 
         # annualized Sharpe ratio
@@ -197,25 +215,9 @@ class sma:
         #Compound Annual Growth Rate
         days = (self.df.index[-1] - self.df.index[0]).days
         cagr = ((((self.df['Close'][-1]) / self.df['Close'][1])) ** (365.0/days)) - 1
-        print("Compound Annual Growth Rate:",cagr)
+        print("Compound Annual Growth Rate:",cagr)'''
     
-    #Determine whether it's a buy or sell signal
-    #If short_mavg goes above long_mavg, it's a buy
-    #If short_mavg goes below long_mavg, it's a sell
-    #The longer it's been since a signal compared to the time different the 
-    #window choice will decay the signal strength
-    def getSignal(self):
-        #extract last value -1 is sell, 1 is buy
-        try:
-            sig = self.signals['positions'].nonzero()[0]
-            sig = self.signals['positions'].iloc[sig]
-            last_signal = sig.tail(1).item()
-            if last_signal == -1:
-                return 'sell'
-            elif last_signal == 1:
-                return 'buy'
-        except:
-            return 'none'
+
 
         
 '''
