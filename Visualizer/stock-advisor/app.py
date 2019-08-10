@@ -10,7 +10,9 @@ import pandas as pd
 import time
 
 from Models.sma import sma
-import Data.GetStockData
+from Models.volatility import volatility as vol
+
+#import Data.GetStockData
 
 app = dash.Dash('stock-advisor')
 server = app.server
@@ -74,18 +76,29 @@ app.layout = html.Div([
             dcc.Slider(
                 id='sma-slider-short',
                 min=2,
-                max=50,
-                value=2,
-                marks={x: x for x in range(2,50,4)}
+                max=30,
+                value=5,
+                marks={x: x for x in range(2,30,4)}
         ), style = {'padding': '30px 10px 20px 10px'}),
         html.Div(
             dcc.Slider(
                 id='sma-slider-long',
                 min=10,
-                max=200,
-                value=50,
-                marks={x: x for x in range(10,200,10)}
+                max=100,
+                value=30,
+                marks={x: x for x in range(10,100,5)}
             ), style = {'padding': '20px 10px 30px 10px'}),
+    ]),
+    html.Div([
+        html.Div(id='vol-model'),
+        html.Div(
+            dcc.Slider(
+                id='vol-slider',
+                min=10,
+                max=100,
+                value=75,
+                marks={x: x for x in range(10,100,5)}
+        ), style = {'padding': '30px 10px 20px 10px'}),
     ]),
     html.H2('Bottom',
             style={'display': 'inline',
@@ -106,7 +119,7 @@ app.layout = html.Div([
                dash.dependencies.Input('stock-ticker-input', 'value')])
 def update_data(n_clicks,tickers):
     print('updating data...')
-    import Data.GetStockData
+    #import Data.GetStockData
 
 #functionallity for plotting stock price plots
 @app.callback(
@@ -186,7 +199,6 @@ def sma_model(tickers,short,long):
             #extract dataframe to be plotted ('short_mavg' and 'long_mavg' columns)
             df_sma = sma1.signals
             signal = sma1.getCurrentSignal()
-            print('column names',sma1.signals.columns)
             
             if signal == 'buy':
                 html_components.append(html.H3(
@@ -237,6 +249,59 @@ def sma_model(tickers,short,long):
                 id='sma-'+ticker+'-graph',
                 figure={
                     'data': short_mavg+long_mavg+close+markers_buy+markers_sell,
+                    'layout': {
+                        'margin': {'b': 30, 'r': 30, 'l': 30, 't': 10},
+                        'legend': {'x': 0}
+                    }
+                }
+            ))
+    return html_components
+
+# functionality for Volatility model
+@app.callback(
+        dash.dependencies.Output('vol-model','children'),
+        [dash.dependencies.Input('stock-ticker-input','value'),
+         dash.dependencies.Input('vol-slider','value')])
+def vol_model(tickers,min_period):
+    html_components = []
+    html_components.append(html.H2("Volatility Model: a comparison to DJI",
+            style={'marginTop': 20, 'marginBottom': 20}))
+    if not tickers:
+        html_components.append(html.H3(
+            "Select a stock ticker.",
+            style={'marginTop': 20, 'marginBottom': 20}
+        ))
+    else:
+        for ticker in tickers:
+            # import needed data
+            df = pd.read_csv('Data/Data/'+ticker+'.csv')
+            df['Date'] = pd.to_datetime(df['Date'])
+            df = df.set_index(df['Date'], drop=True)  # index by date
+            
+            # create volatility model
+            vol1 = vol(df, min_period)
+            vol1.calcVol()
+            
+            # extract dataframe to be plotted
+            df_vol = vol1.vol_diff
+
+            # convert data into figure plot
+            diff = [{
+                'x': df_vol.index, 'y': df_vol['Dif'],
+                'type': 'scatter', 'mode':'lines',
+                'name': ticker + ' volatility - DJI volatility',
+                'legendgroup': 'Volatility Difference',
+                }]
+            ratio = [{
+                'x': df_vol.index, 'y': df_vol['Ratio'],
+                'type': 'scatter', 'mode':'lines',
+                'name': ticker+' volatility / DJI volatility',
+                'legendgroup': 'Volatility Ratio',
+                }]
+            html_components.append(dcc.Graph(
+                id='vol-'+ticker+'-graph',
+                figure={
+                    'data': diff + ratio,
                     'layout': {
                         'margin': {'b': 30, 'r': 30, 'l': 30, 't': 10},
                         'legend': {'x': 0}

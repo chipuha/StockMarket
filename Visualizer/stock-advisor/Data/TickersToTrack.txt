@@ -1,3 +1,4 @@
+^DJI
 MMM
 AXP
 AAPL

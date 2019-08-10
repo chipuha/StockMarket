@@ -22,10 +22,10 @@ class volatility:
         self.min_periods = min_window
 
         # Import DOW data
-        self.df_dow = pd.read_csv('../Data/Data/^DJI.csv', index_col=[0])
-        self.df_dow = format_df(df_dow)
+        self.df_dow = pd.read_csv('Data/Data/^DJI.csv', index_col=[0])
+        self.df_dow = format_df(self.df_dow)
 
-    # Calculates difference in perecent change of price--compared to DOW
+    # Calculates difference in percent change of price--compared to DOW
     def calcVol(self):
         daily_close_px_dow = self.df_dow[['Adj_Close']]
         daily_close_px = self.df[['Adj_Close']]
@@ -46,7 +46,7 @@ class volatility:
         vol_diff.head()
         vol_diff['Dif'] = vol_diff['Adj_Close_tick'] - vol_diff['Adj_Close_dow']
         vol_diff['Ratio'] = vol_diff['Adj_Close_tick'] / vol_diff['Adj_Close_dow']
-        vol_diff = vol_diff.dropna()
+        self.vol_diff = vol_diff.dropna()
 
         # vol_diff['Dif'].hist()
         # vol_diff['Dif'].describe()
